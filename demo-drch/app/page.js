@@ -57,38 +57,42 @@ export default function Home() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
-      {!isJoined ? (
-        <JoinChat
-          username={username}
-          setUsername={setUsername}
-          isCreatingRoom={isCreatingRoom}
-          setIsCreatingRoom={setIsCreatingRoom}
-          selectedType={selectedType}
-          setSelectedType={setSelectedType}
-          roomName={roomName}
-          setRoomName={setRoomName}
-          customRoom={customRoom}
-          setCustomRoom={setCustomRoom}
-          isLoading={isLoading}
-          setIsLoading={setIsLoading}
-          room={room}
-          setRoom={setRoom}
-          setRoomCapacity={setRoomCapacity}
-          joinChat={joinChat}
-        />
-      ) : (
-        <ChatRoom
-          room={room}
-          activeUsers={activeUsers}
-          roomCapacity={roomCapacity}
-          username={username}
-          messages={messages}
-          inputMessage={inputMessage}
-          setInputMessage={setInputMessage}
-          sendMessage={sendMessage}
-        />
-      )}
+    <div className="min-h-screen bg-[url('/images/ต้นไม้มมม1.png')] bg-cover bg-center bg-fixed ">
+      <div className="min-h-screen bg-white/70 " >
+        <div className="max-w-4xl mx-auto p-6 bg-white/90 rounded-xl shadow-xl">
+          {!isJoined ? (
+            <JoinChat
+              username={username}
+              setUsername={setUsername}
+              isCreatingRoom={isCreatingRoom}
+              setIsCreatingRoom={setIsCreatingRoom}
+              selectedType={selectedType}
+              setSelectedType={setSelectedType}
+              roomName={roomName}
+              setRoomName={setRoomName}
+              customRoom={customRoom}
+              setCustomRoom={setCustomRoom}
+              isLoading={isLoading}
+              setIsLoading={setIsLoading}
+              room={room}
+              setRoom={setRoom}
+              setRoomCapacity={setRoomCapacity}
+              joinChat={joinChat}
+            />
+          ) : (
+            <ChatRoom
+              room={room}
+              activeUsers={activeUsers}
+              roomCapacity={roomCapacity}
+              username={username}
+              messages={messages}
+              inputMessage={inputMessage}
+              setInputMessage={setInputMessage}
+              sendMessage={sendMessage}
+            />
+          )}
+        </div>
+      </div>
     </div>
   );
 }
