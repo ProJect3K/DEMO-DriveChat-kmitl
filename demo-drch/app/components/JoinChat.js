@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { ROOM_TYPES } from '../lib/constants';
 import TransportButtons from './TransportButtons';
+import TypeUser from './TypeUser';
 
 export default function JoinChat({
   username,
@@ -18,7 +19,10 @@ export default function JoinChat({
   room,
   setRoom,
   setRoomCapacity,
-  joinChat
+  joinChat,
+
+  onSelectUserType,
+
 }) {
   const [userType, setUserType] = useState(null);
   const [noRoomsAvailable, setNoRoomsAvailable] = useState(false);
@@ -139,15 +143,25 @@ export default function JoinChat({
   };
 
   return (
-    <div className="flex flex-col items-center max-w-md mx-auto">
+    <div className="flex flex-col items-center max-w-2xl mx-auto">
       <h2 className="text-2xl font-semibold mb-6">DriveChat@kmitl</h2>
-      <input
-        type="text"
-        placeholder="Enter your username"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-        className="w-full px-4 py-2 mb-4 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-      />
+      <div className="w-full flex gap-2">
+        <input
+          type="text"
+          placeholder="Enter your username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          className="w-full px-4 py-2 mb-4 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          style={{ flex: 4 }}
+        />
+      <div style={{ flex: 3 }}> 
+        <TypeUser
+          userType={userType}
+          onSelectUserType={handleUserTypeSelect}
+        />
+      </div>
+    </div>
+
       
       {isCreatingRoom && userType === 'driver' ? (
         <div className="w-full">
@@ -168,8 +182,9 @@ export default function JoinChat({
           <div className="flex gap-3">
             <button 
               onClick={createRoom} 
-              disabled={isLoading || !username || !selectedType}
-              className="flex-1 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+              disabled={isLoading || !username || !selectedType || !customRoom}
+              className="createBtn"
+              style={{ flex: 5 }}
             >
               {isLoading ? 'Creating...' : 'Create & Join Room'}
             </button>
@@ -179,7 +194,8 @@ export default function JoinChat({
                 setRoomName("");
               }} 
               disabled={isLoading}
-              className="flex-1 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 disabled:bg-gray-50 disabled:text-gray-400 disabled:cursor-not-allowed transition-colors"
+              className="cancleBtn"
+              style={{ flex: 1 }}
             >
               Cancel
             </button>
@@ -201,13 +217,15 @@ export default function JoinChat({
           )}
 
           <div className="flex gap-3">
-            <button 
-              onClick={joinRandomRoom} 
-              disabled={isLoading || !username || !selectedType || !userType}
-              className="flex-1 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
-            >
-              {isLoading ? 'Finding room...' : 'Join Random Room'}
-            </button>
+            {userType === 'passenger' && (
+              <button 
+                onClick={joinRandomRoom} 
+                disabled={isLoading || !username || !selectedType || !userType}
+                className="flex-1 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+              >
+                {isLoading ? 'Finding room...' : 'Join Random Room'}
+              </button>
+            )}
             
             {userType === 'driver' && (
               <button 
