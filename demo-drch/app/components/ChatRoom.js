@@ -13,7 +13,7 @@ const ChatRoom = ({
   nextStation = "ped pong",
   currentStatus = "Driving",
 }) => {
-  const [timeRemaining, setTimeRemaining] = useState(30);
+  const [timeRemaining, setTimeRemaining] = useState(3000);
   const [localStatus, setLocalStatus] = useState(currentStatus);
   const [localNextStation, setLocalNextStation] = useState(nextStation);
   const [previousRoom, setPreviousRoom] = useState("");
@@ -82,6 +82,7 @@ const ChatRoom = ({
   const activeUserCount = Array.isArray(activeUsers) ? activeUsers.length : 0;
 
   return (
+    // show page
     <div className="relative min-h-screen bg-gray-100 p-4">
       {/* Status Bar */}
       <div className="flex justify-between items-center mb-4 bg-white rounded-lg p-4 shadow-sm">
@@ -98,20 +99,21 @@ const ChatRoom = ({
 
       {/* Rest of the component remains the same */}
       <div className="flex gap-4 h-[calc(100vh-200px)]">
-        <div className="w-1/2 bg-white rounded-lg shadow-lg p-4">
-          <div className="h-full flex items-center justify-center bg-gray-900 rounded-lg">
-            <div className="text-4xl text-white">video</div>
-          </div>
-        </div>
 
-        <div className="w-1/2 bg-white rounded-lg shadow-lg p-4 flex flex-col">
+        {/* video */}
+        <div className="w-1/2 bg-white rounded-lg shadow-lg p-4 flex-grow-0 basis-2/3">
+          <video src="/videos/duck.mp4" autoPlay loop className='h-full w-full'/>
+        </div>
+        
+        {/* Chat */}
+        <div className="w-1/2 bg-white rounded-lg shadow-lg p-4 flex flex-col   flex-grow-0 basis-1/3">
           <div className="border-b pb-2 mb-4">
             <h2 className="text-xl font-bold">Room: {getRoomDisplayName()}</h2>
             <div className="text-sm text-gray-600">
               user seat: {activeUserCount}/{roomCapacity}
             </div>
           </div>
-
+        
           <div className="flex-1 overflow-y-auto mb-4 px-4 space-y-4">
             {messages.map((msg, index) => {
               const isSystemMessage = msg.startsWith("System:");
@@ -131,13 +133,13 @@ const ChatRoom = ({
                   className={`flex flex-col ${getAlignmentClass(isSystemMessage, username, sender)}`}
                 >
                   {!isSystemMessage && (
-                    <div className="text-sm text-gray-600 mb-1 px-2">
+                    <div className="text-xs text-gray-600 mb-1 px-2">
                       {sender}
                     </div>
                   )}
                   <div className={`rounded-lg p-3 max-w-[80%] break-words
                     ${isSystemMessage 
-                      ? 'bg-gray-100 text-gray-600 text-center w-full' 
+                      ? 'bg-gray-100 text-gray-600 text-center w-full text-xs' 
                       : 'bg-blue-100'}`}
                   >
                     {content}
@@ -161,7 +163,8 @@ const ChatRoom = ({
                 onClick={sendMessage}
                 className="px-6 py-2 bg-amber-400 text-black rounded-lg hover:bg-amber-500 transition-colors"
               >
-                send 😊
+                send
+                 {/* 😊 */}
               </button>
             </div>
           </div>

@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import ChatRoom from 'app/components/ChatRoom';
 import JoinChat from 'app/components/JoinChat';
+import Image from 'next/image';
 
 export default function Home() {
   const [messages, setMessages] = useState([]);
@@ -73,8 +74,8 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-[url('/images/ต้นไม้มมม1.png')] bg-cover bg-center bg-fixed ">
-      <div className="min-h-screen bg-white/70 pt-6" >
-        <div className="max-w-4xl mx-auto p-6 bg-white/90 rounded-xl shadow-xl">
+      <div className="min-h-screen bg-white/70 p-6" >
+        <div className="max-w-7xl mx-auto p-6 bg-white/90 rounded-xl shadow-xl">
           {!isJoined ? (
             <JoinChat
               username={username}
