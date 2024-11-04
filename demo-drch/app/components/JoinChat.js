@@ -234,7 +234,7 @@ export default function JoinChat({
                   setRoomName("");
                 }} 
                 disabled={isLoading}
-                className="flex-1 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 disabled:bg-gray-50 disabled:text-gray-400 disabled:cursor-not-allowed transition-colors"
+                className="flex-1 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-50 disabled:text-gray-400 disabled:cursor-not-allowed transition-colors"
               >
                 Create New Room
               </button>

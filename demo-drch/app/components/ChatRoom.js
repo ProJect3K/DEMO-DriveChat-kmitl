@@ -1,3 +1,5 @@
+import "./chatroom.css"
+
 export default function ChatRoom({
     room,
     activeUsers,
