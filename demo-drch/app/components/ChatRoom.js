@@ -83,7 +83,7 @@ const ChatRoom = ({
 
   return (
     // show page
-    <div className="relative min-h-screen bg-gray-100 p-4">
+    <div className="relative min-h-screen bg-[#6D81A9] p-4">
       {/* Status Bar */}
       <div className="flex justify-between items-center mb-4 bg-white rounded-lg p-4 shadow-sm">
         <div className="space-y-1">
@@ -106,7 +106,7 @@ const ChatRoom = ({
         </div>
         
         {/* Chat */}
-        <div className="w-1/2 bg-white rounded-lg shadow-lg p-4 flex flex-col   flex-grow-0 basis-1/3">
+        <div className="w-1/2 bg-[#E4E9F3] rounded-lg shadow-lg p-4 flex flex-col flex-grow-0 basis-1/3 bg-[#E4E9F3]">
           <div className="border-b pb-2 mb-4">
             <h2 className="text-xl font-bold">Room: {getRoomDisplayName()}</h2>
             <div className="text-sm text-gray-600">
@@ -157,7 +157,7 @@ const ChatRoom = ({
                 onChange={(e) => setInputMessage(e.target.value)}
                 onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
                 placeholder="chat message"
-                className="flex-1 p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="flex-1 p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-[#D9D9D9]"
               />
               <button
                 onClick={sendMessage}
