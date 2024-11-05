@@ -31,14 +31,8 @@ class ConnectionManager:
         self.room_transition_tasks: dict[str, asyncio.Task] = {}
         self.original_rooms: dict[str, str] = {}  # Track original rooms for users
         
-        # Initialize duck pond and ped pong rooms
-        self.available_rooms["duck_pond"] = {
-            "capacity": 15,
-            "next_transition": None,
-            "is_special": True,
-            "transport_type": None
-        }
-        self.available_rooms["ped_pong"] = {
+        # Initialize บ่อเป็ด room
+        self.available_rooms["บ่อเป็ด"] = {
             "capacity": 15,
             "next_transition": None,
             "is_special": True,
@@ -81,13 +75,13 @@ class ConnectionManager:
                 await self.broadcast(f"System: {username} has left the chat", room)
                 await self.broadcast_user_list(room)
                 
-                if len(self.active_users[room]) == 0 and room not in ["duck_pond", "ped_pong"]:
+                if len(self.active_users[room]) == 0 and room != "บ่อเป็ด":
                     if room in self.room_transition_tasks:
                         self.room_transition_tasks[room].cancel()
                     del self.available_rooms[room]
 
-    async def move_users_to_ped_pong(self, room: str):
-        if room in ["ped_pong", "duck_pond"] or not self.active_connections.get(room):
+    async def move_users_to_บ่อเป็ด(self, room: str):
+        if room == "บ่อเป็ด" or not self.active_connections.get(room):
             return
 
         users_to_move = list(zip(self.active_connections[room], self.active_users[room]))
@@ -100,24 +94,24 @@ class ConnectionManager:
         self.active_connections[room] = []
         self.active_users[room] = []
         
-        # Move users to ped pong
+        # Move users to บ่อเป็ด
         for websocket, username in users_to_move:
             try:
-                await websocket.send_text(f"System: Moving all users to ped pong...")
+                await websocket.send_text(f"System: Moving all users to บ่อเป็ด...")
                 await asyncio.sleep(0.1)  # Small delay to ensure message is sent
                 
-                if "ped_pong" not in self.active_connections:
-                    self.active_connections["ped_pong"] = []
-                    self.active_users["ped_pong"] = []
+                if "บ่อเป็ด" not in self.active_connections:
+                    self.active_connections["บ่อเป็ด"] = []
+                    self.active_users["บ่อเป็ด"] = []
                 
-                self.active_connections["ped_pong"].append(websocket)
-                self.active_users["ped_pong"].append(username)
+                self.active_connections["บ่อเป็ด"].append(websocket)
+                self.active_users["บ่อเป็ด"].append(username)
                 
                 # Force update the client's room state
-                await websocket.send_text("System: ROOM_CHANGE:ped_pong")
+                await websocket.send_text("System: ROOM_CHANGE:บ่อเป็ด")
                 
-                await self.broadcast("System: " + username + " was moved from " + room, "ped_pong")
-                await self.broadcast_user_list("ped_pong")
+                await self.broadcast("System: " + username + " was moved from " + room, "บ่อเป็ด")
+                await self.broadcast_user_list("บ่อเป็ด")
                 
             except Exception as e:
                 print(f"Error moving user {username}: {e}")
@@ -169,7 +163,7 @@ class ConnectionManager:
             return False
 
     async def start_room_transition_timer(self, room: str):
-        if room in ["duck_pond", "ped_pong"] or self.available_rooms[room].get("is_special"):
+        if room == "บ่อเป็ด" or self.available_rooms[room].get("is_special"):
             return
 
         try:
@@ -177,19 +171,19 @@ class ConnectionManager:
             self.available_rooms[room]["next_transition"] = next_transition
             
             await asyncio.sleep(160)  # 2m 40s - warn users
-            await self.broadcast(f"System: Room will transition to ped pong in 20 seconds!", room)
+            await self.broadcast(f"System: Room will transition to บ่อเป็ด in 20 seconds!", room)
             
             await asyncio.sleep(20)  # Wait final 20 seconds
-            await self.move_users_to_ped_pong(room)
+            await self.move_users_to_บ่อเป็ด(room)
             
         except asyncio.CancelledError:
             print(f"Room transition timer cancelled for {room}")
         except Exception as e:
             print(f"Error in transition timer for {room}: {e}")
-            await self.move_users_to_ped_pong(room)  # Attempt to move users even if there's an error
+            await self.move_users_to_บ่อเป็ด(room)  # Attempt to move users even if there's an error
 
     def get_time_remaining(self, room: str) -> Optional[int]:
-        if room not in self.available_rooms or room in ["duck_pond", "ped_pong"]:
+        if room not in self.available_rooms or room == "บ่อเป็ด":
             return None
             
         next_transition = self.available_rooms[room].get("next_transition")
@@ -212,7 +206,7 @@ class ConnectionManager:
         available_rooms = []
         for room_name, room_info in self.available_rooms.items():
             # Check transport_type in room_info instead of room name
-            if (room_name not in ["duck_pond", "ped_pong"] and 
+            if (room_name != "บ่อเป็ด" and 
                 room_info.get("transport_type") == transport_type):
                 current_users = self.get_room_count(room_name)
                 if current_users < room_info["capacity"]:
