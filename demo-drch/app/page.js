@@ -65,10 +65,10 @@ export default function Home() {
 
   const handleRoomChange = (newRoom) => {
     setRoom(newRoom);
-    if (newRoom === 'duck_pond') {
-      // Re-establish websocket connection for duck pond
+    if (newRoom === 'ped_pong') {
+      // Re-establish websocket connection for ped_pong  pond
       socket.current.close();
-      joinChat('duck_pond');
+      joinChat('ped_pong');
     }
   };
 

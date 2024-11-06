@@ -19,6 +19,8 @@ const ChatRoom = ({
   const [localNextStation, setLocalNextStation] = useState(nextStation);
   const [previousRoom, setPreviousRoom] = useState("");
   const [isInPedPong, setIsInPedPong] = useState(false);
+  // let vdoChat = '/videos/duck.mp4';
+  const [vdoChat, setVdoChat] = useState("");
 
   const getAlignmentClass = (isSystemMessage, username, sender) => {
     if (isSystemMessage) {
@@ -30,6 +32,7 @@ const ChatRoom = ({
     }
   };
 
+
   // Handle initial room setup and timers
   useEffect(() => {
     if (room === 'ped_pong' && !isInPedPong) {
@@ -39,12 +42,18 @@ const ChatRoom = ({
     } else if (room !== 'ped_pong' && !isInPedPong) {
       setRouteTimer(30); // Reset route timer when entering a new regular room
     }
+
+    if (room === 'ped_pong') {
+      setVdoChat("/videos/duck.mp4")
+    } else {
+      setVdoChat("/videos/EvBus.mp4")
+    }
   }, [room]);
 
   // Handle route timer (countdown before moving to Ped Pong)
   useEffect(() => {
     let timer;
-    if (!isInPedPong && room !== 'duck_pond' && routeTimer > 0) {
+    if (!isInPedPong && room !== 'ped_pong' && routeTimer > 0) {
       timer = setInterval(() => {
         setRouteTimer(prev => {
           const newTime = Math.max(0, prev - 1);
@@ -108,7 +117,6 @@ const ChatRoom = ({
 
   const getRoomDisplayName = () => {
     if (room === 'ped_pong') return 'Ped Pong';
-    if (room === 'duck_pond') return 'Duck Pond';
     const parts = room.split('_');
     if (parts.length > 2) {
       const transportType = parts[0];
@@ -129,7 +137,7 @@ const ChatRoom = ({
           <div className="text-lg">Current Status: {localStatus}</div>
         </div>
         <div className="text-right space-y-1">
-          {!isInPedPong && room !== 'duck_pond' && (
+          {!isInPedPong && room !== 'ped_pong' && (
             <div className="text-lg font-semibold text-blue-600">
               Time to Ped Pong: {formatTime(routeTimer)}
             </div>
@@ -146,7 +154,7 @@ const ChatRoom = ({
       <div className="flex gap-4 h-[calc(100vh-200px)]">
         {/* Video */}
         <div className="w-1/2 bg-white rounded-lg shadow-lg p-4 flex-grow-0 basis-2/3">
-          <video src="/videos/duck.mp4" autoPlay loop className="h-full w-full"/>
+          <video src={vdoChat} autoPlay loop className="h-full w-full"/>
         </div>
         
         {/* Chat */}
@@ -184,7 +192,7 @@ const ChatRoom = ({
                   <div className={`rounded-lg p-3 max-w-[80%] break-words
                     ${isSystemMessage 
                       ? 'bg-gray-100 text-gray-600 text-center w-full text-xs' 
-                      : 'bg-blue-300'}`}
+                      : 'bg-blue-200 font-semibold'}`}
                   >
                     {content}
                   </div>
